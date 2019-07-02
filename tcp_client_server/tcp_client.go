@@ -7,6 +7,7 @@ import "fmt"
 import "log"
 import "flag"
 import "strconv"
+//import "io/ioutil"
 
 func main() {
   //initialize connection
@@ -52,17 +53,21 @@ func main() {
     }
   } else {
     //interactive flag is false
-    data := make([]byte, numbytes)
-    nbytes, err_sent := conn.Write(data)
+    //send message to server
+    message := make([]byte, numbytes)
+    nbytes, err_sent := conn.Write(message)
     if (err_sent != nil) {
       log.Fatal(err_sent)
     }
     fmt.Println("Sent ", nbytes, " bytes Message to server")
 
-    //Listen for server reply
-    /*_, err_read := bufio.NewReader(conn).ReadString('\n')
+    //maximum allowed: 32KB
+    data := make([]byte, 32*1024)
+    numBytes, err_read := conn.Read(data)
     if (err_read != nil) {
       log.Fatal(err_read)
-    }*/
+    }
+    data = nil
+    fmt.Println(numBytes, "bytes data received from server")
   }
 }

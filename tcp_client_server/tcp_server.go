@@ -4,7 +4,7 @@ import "net"
 import "fmt"
 import "log"
 import "bufio"
-import "io/ioutil"
+//import "io/ioutil"
 import "flag"
 
 func main() {
@@ -42,37 +42,24 @@ func main() {
       if (err_send != nil) {
         log.Fatal(err_send)
       }
-      /*const MaxUint = ^uint(0)
-      const MaxInt = int(MaxUint >> 1)
-      data := make([]byte, MaxInt)
-      numBytes, err_read := conn.Read(data)
-      if (err_read != nil) {
-        log.Fatal(err_read)
-      }
-      data = data[:0]
-      fmt.Println(numBytes, "bytes data received from client")
-
-      //send response message back to client
-      message := make([]byte, numBytes)
-      _, err_sent := conn.Write(message)
-      if (err_sent != nil) {
-        log.Fatal(err_sent)
-      }
-      message = nil*/
     }
   } else {
-    reader := bufio.NewReader(conn)
-    b, err := ioutil.ReadAll(reader)
-    if (err != nil) {
-      log.Fatal(err)
+    //will listent for message from client
+    //maximum allowed: 32KB
+    data := make([]byte, 32*1024)
+    numBytes, err_read := conn.Read(data)
+    if (err_read != nil) {
+      log.Fatal(err_read)
     }
-    fmt.Println(len(b), " bytes data received from client.")
+    data = nil
+    fmt.Println(numBytes, "bytes data received from client")
 
-    //sent response back to client
-    data := make([]byte, len(b))
-    _, err_sent := conn.Write(data)
+    //send response message back to client
+    message := make([]byte, numBytes)
+    _, err_sent := conn.Write(message)
     if (err_sent != nil) {
       log.Fatal(err_sent)
     }
+    message = nil
   }
 }
