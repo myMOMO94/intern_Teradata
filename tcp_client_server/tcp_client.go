@@ -15,6 +15,11 @@ func main() {
   interactivePtr := flag.Bool("interactive", false, "a bool")
   flag.Parse()
 
+  if (len(os.Args) != 4) {
+    fmt.Println("Please follow the pattern ./tcp_client -interactive=true 127.0.0.1:8080 256, not the exact number of arguments as expected!")
+    return
+  }
+
   //find the ip address and num of bytes
   address := os.Args[2]
   numbytes,_ := strconv.Atoi(os.Args[3])
@@ -28,6 +33,8 @@ func main() {
 
   //interactive flag is true
   if *interactivePtr == true {
+    fmt.Println("You are in the interactive mode, which allows you to type in a payload.")
+    fmt.Println("Press Enter if you want to exit.")
     for {
       //read input message from stdin
       reader := bufio.NewReader(os.Stdin)
@@ -35,6 +42,12 @@ func main() {
       text, err_text := reader.ReadString('\n')
       if (err_text != nil) {
         log.Fatal(err_text)
+      }
+      //fmt.Println(string(text))
+      //if there is nothing there, break the connection
+      if (string(text) == "\n") {
+        fmt.Println("Nothing want to send to server, close the connection! ")
+        break
       }
 
       //send message to server
@@ -54,6 +67,7 @@ func main() {
   } else {
     //interactive flag is false
     //send message to server
+    fmt.Println("You are in the non-interactive mode!")
     message := make([]byte, numbytes)
     nbytes, err_sent := conn.Write(message)
     if (err_sent != nil) {

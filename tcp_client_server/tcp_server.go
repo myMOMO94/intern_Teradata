@@ -4,12 +4,16 @@ import "net"
 import "fmt"
 import "log"
 import "bufio"
-//import "io/ioutil"
+import "os"
 import "flag"
 
 func main() {
   fmt.Println("Launching Server...")
 
+  if (len(os.Args) != 2) {
+    fmt.Println("Please follow the pattern ./tcp_server -interactive=true, not the exact number of arguments as expected!")
+    return
+  }
   //parse interactive flag
   interactivePtr := flag.Bool("interactive", false, "a bool")
   flag.Parse()
@@ -29,6 +33,7 @@ func main() {
   }
 
   if *interactivePtr == true {
+    fmt.Println("You are in the interactive mode, which allows you to type in a payload.")
     for {
       // will listen for message to process ending in newline delim
       message, err_rec := bufio.NewReader(conn).ReadString('\n')
@@ -44,6 +49,7 @@ func main() {
       }
     }
   } else {
+    fmt.Println("You are in the non-interactive mode!")
     //will listent for message from client
     //maximum allowed: 32KB
     data := make([]byte, 32*1024)
