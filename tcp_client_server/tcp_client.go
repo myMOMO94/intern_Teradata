@@ -23,12 +23,12 @@ func main() {
   //find the ip address and num of bytes
   address := os.Args[2]
   numbytes, err_size := strconv.Atoi(os.Args[3])
-  if (numbytes > 32*1024) {
+  /*if (numbytes > 32*1024) {
     fmt.Println("Out of range! Maximum allowed size is 32KB")
     return
-  }
+  }*/
   if (err_size != nil) {
-   fmt.Println("Please check the data size want to be transferred, maximum allowed size is 32KB")
+   //fmt.Println("Please check the data size want to be transferred, maximum allowed size is 32KB")
    log.Fatal(err_size)
   }
 
