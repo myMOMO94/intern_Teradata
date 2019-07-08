@@ -76,6 +76,21 @@ func main() {
     //interactive flag is false
     //send message to server
     fmt.Println("You are in the non-interactive mode!")
+    // send number of bytes info to server first
+    str_numbytes := strconv.Itoa(numbytes)
+    _, err_bytes := fmt.Fprintf(conn, str_numbytes + "\n")
+    if (err_bytes != nil) {
+      log.Fatal(err_bytes)
+    }
+    fmt.Println("Sent number of bytes info to server: " + str_numbytes)
+
+    byte_message, err_byt := bufio.NewReader(conn).ReadString('\n')
+    if (err_byt != nil) {
+      log.Fatal(err_byt)
+    }
+    fmt.Print("server sent back: " + byte_message)
+
+    // send message to server
     message := make([]byte, numbytes)
     nbytes, err_sent := conn.Write(message)
     if (err_sent != nil) {
@@ -83,8 +98,7 @@ func main() {
     }
     fmt.Println("Sent ", nbytes, " bytes Message to server")
 
-    //maximum allowed: 32KB
-    data := make([]byte, 32*1024)
+    data := make([]byte, numbytes)//32*1024)
     numBytes, err_read := conn.Read(data)
     if (err_read != nil) {
       log.Fatal(err_read)

@@ -7,6 +7,29 @@ import "bufio"
 import "os"
 import "flag"
 
+// convert string bytes info to integer
+func Atoi (s string) int {
+  var (
+    n uint64
+    i int
+    v byte
+  )
+
+  for ; i < len(s); i++ {
+    d := s[i]
+    if '0' <= d && d <= '9' {
+      v = d - '0'
+    } else {
+      break
+    }
+    n *= uint64(10)
+    n += uint64(v)
+
+  }
+  fmt.Println("int number: ", int(n))
+  return int(n)
+}
+
 func main() {
   fmt.Println("Launching Server...")
 
@@ -50,9 +73,24 @@ func main() {
     }
   } else {
     fmt.Println("You are in the non-interactive mode!")
-    //will listent for message from client
-    //maximum allowed: 32KB
-    data := make([]byte, 32*1024)
+    //will listen for message from client
+    //get number of bytes info first
+    nbytes, err_bytes := bufio.NewReader(conn).ReadString('\n')
+    if (err_bytes != nil) {
+      log.Fatal(err_bytes)
+    }
+    numbytes := Atoi(string(nbytes))
+    fmt.Println("number of bytes wants to be transferred: ", numbytes)
+
+    // tell client that server received bytes info
+    _, err_byt := conn.Write([]byte(string("Received bytes info.") + "\n"))
+    if (err_byt != nil) {
+      log.Fatal(err_byt)
+    }
+    fmt.Println("Sent received bytes info message back.")
+
+    //will listen for message from client
+    data := make([]byte, numbytes)//32*1024)
     numBytes, err_read := conn.Read(data)
     if (err_read != nil) {
       log.Fatal(err_read)
