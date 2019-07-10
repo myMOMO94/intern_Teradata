@@ -4,12 +4,12 @@
 set -m
 
 # Start the primary process and put it in the background
-./tcp_server -interactive=false $NUMRUNS &
+./tcp_server -interactive=false -verbose=false $NUMRUNS &
 
 sleep 1
 
 # Start the helper process
-./tcp_client -interactive=false 127.0.0.1:8080 $NUMBYTES $NUMRUNS
+./tcp_client -interactive=false -verbose=false 127.0.0.1:8080 $NUMBYTES $NUMRUNS
 
 # the my_helper_process might need to know how to wait on the
 # primary process to start before it does its work and returns

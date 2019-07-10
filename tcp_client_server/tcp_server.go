@@ -38,13 +38,14 @@ func main() {
     fmt.Println("Please follow the pattern ./tcp_server -interactive=true, not the exact number of arguments as expected!")
     return
   }*/
-  numruns, err_run := strconv.Atoi(os.Args[2])
+  numruns, err_run := strconv.Atoi(os.Args[3])
   if (err_run != nil) {
     log.Fatal(err_run)
   }
 
   //parse interactive flag
   interactivePtr := flag.Bool("interactive", false, "a bool")
+  verbosePtr := flag.Bool("verbose", false, "a bool")
   flag.Parse()
 
   //listen on all interfaces
@@ -62,14 +63,18 @@ func main() {
   }
 
   if *interactivePtr == true {
-    fmt.Println("SERVER: You are in the interactive mode, which allows you to type in a payload.")
+    if *verbosePtr == true {
+      fmt.Println("SERVER: You are in the interactive mode, which allows you to type in a payload.")
+    }
     for {
       // will listen for message to process ending in newline delim
       message, err_rec := bufio.NewReader(conn).ReadString('\n')
       if (err_rec != nil) {
         log.Fatal(err_rec)
       }
-      fmt.Print("SERVER: Message received: ", string(message))
+      if *verbosePtr == true {
+        fmt.Print("SERVER: Message received: ", string(message))
+      }
 
       //send message back to client
       _, err_send := conn.Write([]byte(string(message) + "\n"))
@@ -78,7 +83,9 @@ func main() {
       }
     }
   } else {
-    fmt.Println("SERVER: You are in the non-interactive mode!")
+    if *verbosePtr == true {
+      fmt.Println("SERVER: You are in the non-interactive mode!")
+    }
     for i := 0; i < numruns; i++ {
       //will listen for message from client
       //get number of bytes info first
@@ -87,14 +94,18 @@ func main() {
         log.Fatal(err_bytes)
       }
       numbytes := Atoi(string(nbytes))
-      fmt.Println("SERVER: Received bytes info:  ", numbytes, " bytes. ")
+      if *verbosePtr == true {
+        fmt.Println("SERVER: Received bytes info:  ", numbytes, " bytes. ")
+      }
 
       // tell client that server received bytes info
       _, err_byt := conn.Write([]byte(string("Received bytes info.") + "\n"))
       if (err_byt != nil) {
         log.Fatal(err_byt)
       }
-      fmt.Println("SERVER: Sent received bytes info message back.")
+      if *verbosePtr == true {
+        fmt.Println("SERVER: Sent received bytes info message back.")
+      }
 
       //will listen for message from client
       data := make([]byte, numbytes)//32*1024)
@@ -110,7 +121,9 @@ func main() {
         numBytes += n
       }
       data = nil
-      fmt.Println("SERVER: ", numBytes, " bytes data received from client")
+      if *verbosePtr == true {
+        fmt.Println("SERVER: ", numBytes, " bytes data received from client")
+      }
 
       //send response message back to client
       message := make([]byte, numBytes)
@@ -119,7 +132,9 @@ func main() {
         log.Fatal(err_sent)
       }
       message = nil
-      fmt.Println("SERVER: sent ", numbyte, " bytes back to client.")
+      if *verbosePtr == true {
+        fmt.Println("SERVER: sent ", numbyte, " bytes back to client.")
+      }
     }
   }
 }

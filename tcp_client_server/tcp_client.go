@@ -14,16 +14,17 @@ func main() {
   //initialize connection
   //choose the mode, either interactive or not interactive
   interactivePtr := flag.Bool("interactive", false, "a bool")
+  verbosePtr := flag.Bool("verbose", false, "a bool")
   flag.Parse()
 
-  if (len(os.Args) != 5) {
+  if (len(os.Args) != 6) {
     fmt.Println("CLIENT: Please follow the pattern ./tcp_client -interactive=true 127.0.0.1:8080 256, not the exact number of arguments as expected!")
     return
   }
 
   //find the ip address and num of bytes
-  address := os.Args[2]
-  numbytes, err_size := strconv.Atoi(os.Args[3])
+  address := os.Args[3]
+  numbytes, err_size := strconv.Atoi(os.Args[4])
   /*if (numbytes > 32*1024) {
     fmt.Println("Out of range! Maximum allowed size is 32KB")
     return
@@ -33,7 +34,7 @@ func main() {
    log.Fatal(err_size)
   }
 
-  numruns, err_run := strconv.Atoi(os.Args[4])
+  numruns, err_run := strconv.Atoi(os.Args[5])
   if (err_run != nil) {
     log.Fatal(err_run)
   }
@@ -47,8 +48,10 @@ func main() {
 
   //interactive flag is true
   if *interactivePtr == true {
-    fmt.Println("CLIENT: You are in the interactive mode, which allows you to type in a payload.")
-    fmt.Println("CLIENT: Press Enter if you want to exit.")
+    if *verbosePtr == true {
+      fmt.Println("CLIENT: You are in the interactive mode, which allows you to type in a payload.")
+      fmt.Println("CLIENT: Press Enter if you want to exit.")
+    }
     for {
       //read input message from stdin
       reader := bufio.NewReader(os.Stdin)
@@ -69,18 +72,24 @@ func main() {
       if (err_sent != nil) {
         log.Fatal(err_sent)
       }
-      fmt.Print("CLIENT: Sent ", nbytes, " bytes Message to server: " + text)
+      if *verbosePtr == true {
+        fmt.Print("CLIENT: Sent ", nbytes, " bytes Message to server: " + text)
+      }
 
       //Listen for sever reply
       message, err_read := bufio.NewReader(conn).ReadString('\n')
       if (err_read != nil) {
         log.Fatal(err_read)
       }
-      fmt.Print("CLIENT: Message from server: " + message)
+      if *verbosePtr == true {
+        fmt.Print("CLIENT: Message from server: " + message)
+      }
     }
   } else {
     //interactive flag is false
-    fmt.Println("CLIENT: You are in the non-interactive mode!")
+    if *verbosePtr == true {
+      fmt.Println("CLIENT: You are in the non-interactive mode!")
+    }
     for i := 0 ; i < numruns; i++ {
       //send message to server
       // send number of bytes info to server first
@@ -89,13 +98,17 @@ func main() {
       if (err_bytes != nil) {
         log.Fatal(err_bytes)
       }
-      fmt.Println("CLIENT: Sent number of bytes info to server: " + str_numbytes)
+      if *verbosePtr == true {
+        fmt.Println("CLIENT: Sent number of bytes info to server: " + str_numbytes)
+      }
 
       byte_message, err_byt := bufio.NewReader(conn).ReadString('\n')
       if (err_byt != nil) {
         log.Fatal(err_byt)
       }
-      fmt.Print("CLIENT: server sent back: " + byte_message)
+      if *verbosePtr == true {
+        fmt.Print("CLIENT: server sent back: " + byte_message)
+      }
 
       start := time.Now()
       // send message to server
@@ -125,7 +138,9 @@ func main() {
       data = nil
       read_end := time.Since(read_start)
       fmt.Println("CLIENT: It took ", read_end, " to receive ", numBytes, " bytes data from server after send message to server.")
-      fmt.Println("ClIENT: It took ", end + read_end, " total.")
+      if *verbosePtr == true {
+        fmt.Println("ClIENT: It took ", end + read_end, " total.")
+      }
     }
   }
 }
