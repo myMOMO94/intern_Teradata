@@ -34,8 +34,8 @@ func main() {
 
     //var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
     for i := 0; i < numruns; i++ {
-        start := time.Now()
         data := make([]byte, numbytes)
+        start := time.Now()
         req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))//bytes.NewBuffer(jsonStr))
         req.Header.Set("X-Custom-Header", "myvalue")
         //req.Header.Set("Content-Type", "application/json")
@@ -54,6 +54,6 @@ func main() {
 
         body, _ := ioutil.ReadAll(resp.Body)
         //fmt.Println("response Body:", string(body))
-        fmt.Println("Response body size: ", len(body), " total time to send request till reveiced response is: ", end)
+        fmt.Println("Response body size: ", len(body), " total time to send request till received response is: ", end)
     }
 }

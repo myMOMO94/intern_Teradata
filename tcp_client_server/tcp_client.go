@@ -110,20 +110,22 @@ func main() {
         fmt.Print("CLIENT: server sent back: " + byte_message)
       }
 
-      start := time.Now()
       // send message to server
       message := make([]byte, numbytes)
+      start := time.Now()
       nbytes, err_sent := conn.Write(message)
       if (err_sent != nil) {
         log.Fatal(err_sent)
       }
-      message = nil
       end := time.Since(start)
-      fmt.Println("CLIENT: It took ", end, " to sent ", nbytes, " bytes Message to server.")
+      message = nil
+      if *verbosePtr == true {
+        fmt.Println("CLIENT: It took ", end, " to sent ", nbytes, " bytes Message to server.")
+      }
       //fmt.Println("CLIENT: Sent ", nbytes, " bytes Message to server")
 
-      read_start := time.Now()
       data := make([]byte, numbytes)//32*1024)
+      read_start := time.Now()
       numBytes, err_read := conn.Read(data)
       if (err_read != nil) {
         log.Fatal(err_read)
@@ -135,12 +137,12 @@ func main() {
         }
         numBytes += n
       }
-      data = nil
       read_end := time.Since(read_start)
-      fmt.Println("CLIENT: It took ", read_end, " to receive ", numBytes, " bytes data from server after send message to server.")
-      if *verbosePtr == true {
+      data = nil
+      fmt.Println("CLIENT: It took ", read_end + end, " to send ", numBytes, " bytes data to server till received response from server.")
+      /*if *verbosePtr == true {
         fmt.Println("ClIENT: It took ", end + read_end, " total.")
-      }
+      }*/
     }
   }
 }
