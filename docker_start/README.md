@@ -1,4 +1,4 @@
-# play around with docker container
+# play around with docker container, service
 
 *You can pull the image here:*
 ```
