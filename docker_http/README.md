@@ -21,6 +21,8 @@
 *Then, please run the following command (this will attach containers to the network you created above):*
 ```
 > docker run -dit --name http-server --network http-net momomengyu/http-server:part2 -verbose=false
+```
 **(Please do not change the server container name)**
+```
 > docker run -it --name http-client --network http-net -e NUMBYTES="512" -e NUMRUNS="2" momomengyu/http-client:part2 -verbose=false
 ```
