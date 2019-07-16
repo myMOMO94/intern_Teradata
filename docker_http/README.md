@@ -27,7 +27,7 @@
 > docker run -it --name http-client --network http-net -e NUMBYTES="512" -e NUMRUNS="2" momomengyu/http-client:part2 -verbose=false
 ```
 
-*Now, you can stop the container:*\
+*Now, you can stop the container:*
 ```
 > docker container stop <CONTAINER ID or NAME>
 ```
