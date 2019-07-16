@@ -1,4 +1,4 @@
-# http-server-client with docker network
+# tcp-server-client with docker network
 
 *You can pull the images here:*
 ```
