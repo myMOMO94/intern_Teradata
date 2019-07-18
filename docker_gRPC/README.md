@@ -2,7 +2,7 @@
 
 *You can pull the images here:*
 ```
-> momomengyu/grpc-client:part1
+> momomengyu/grpc-client:part2
 > momomengyu/grpc-server:part1
 ```
 *Or, you can build the images by yourself*
@@ -24,7 +24,7 @@
 ```
 **(Please do not change the server container name)**
 ```
-> docker run -it --name gRPC-client --network grpc-net -e NUMBYTES="512" -e NUMRUNS="2" momomengyu/grpc-client:part1 -verbose=false
+> docker run -it --name gRPC-client --network grpc-net -e NUMBYTES="512" -e NUMRUNS="2" momomengyu/grpc-client:part2 -verbose=false
 ```
 **(You can change the NUMBYTES and NUMRUNS if you want)**
 

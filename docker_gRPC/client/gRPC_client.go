@@ -19,11 +19,13 @@ func getReply(client bytearray.ByteArrayClient, req *bytearray.ByteRequest, numb
     ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
     defer cancel()
     //data := make([]byte, 512)
+    start := time.Now()
     reply, err := client.SendRequest(ctx, req)//&bytearray.ByteRequest{Request: data})
     if err != nil {
         log.Fatalf("%v.SendRequest(_) = _, %v", client, err)
     }
-    fmt.Println("Received ", len(reply.Reply), "bytes reply from server.")
+    end := time.Since(start)
+    fmt.Println("Received ", len(reply.Reply), "bytes reply from server within ", end)
 }
 
 func main() {
