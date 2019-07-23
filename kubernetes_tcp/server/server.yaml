@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tcpserver
+  labels:
+    app: tcpserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tcpserver
+  template:
+    metadata:
+      labels:
+        app: tcpserver
+    spec:
+      containers:
+      - name: tcp-server
+        image: momomengyu/kubernetes-tcpserver:part2
+        ports:
+        - containerPort: 8080
+        #env:
+        #- name: NUMRUNS
+        #  value: "2"
+        #args: ["NUMRUNS=$(NUMRUNS)"]
