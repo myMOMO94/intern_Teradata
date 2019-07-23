@@ -1,4 +1,4 @@
-# http-server-client with docker network
+# kubernetes-http-server-client
 
 *You can pull the images here:*
 ```
@@ -10,14 +10,14 @@
 ```
 **If you choose to do this, please change the image name in file "server/server.yaml"**
 
-*To run, please type the following command on your terminal:o*\
+*To run, please type the following command on your terminal:*\
 *(Inside kubernetes_http directory)*
 ```
 > kubectl apply -f server/server.yaml
 > kubectl apply -f server/server-svc.yaml
 > kubectl port-forward service/httpserver 8080
 ```
-*This will create a kubernetes service called httpserver, then forward port 8080 to localhost*
+*This will create a kubernetes service called httpserver, then forward container port 8080 to localhost port 8080*
 
 *Then, you can browse http://localhost:8080/ or http://localhost:8080/test in your browser, you will see the difference.*
 
