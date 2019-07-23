@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: http-server
-        image: momomengyu/kubernetes-httpserver:part1
+        image: momomengyu/kubernetes-httpserver:part2
         ports:
         - containerPort: 8080

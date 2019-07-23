@@ -6,6 +6,9 @@ import (
     "net/http"
     "io/ioutil"
     "fmt"
+    "text/template"
+    "github.com/yosssi/gohtml"
+    "os"
 )
 
 /*type test_struct struct {
@@ -15,7 +18,25 @@ import (
 func test(rw http.ResponseWriter, req *http.Request) {
     switch req.Method {
     case "GET":
-        fmt.Fprintf(rw, "Just ouput something for test.")
+        tpl, err := template.New("test").Parse("<html><h3>Hello!</h3><b>Hostname:</b> {{.hostname}}</html>")
+        if err != nil {
+	    panic(err)
+	}
+        addrs, err := os.Hostname()
+        //data["hostname"] = addrs
+	data := map[string]interface{}{"hostname": addrs}
+
+        file, err := os.Create("form.html")
+        if (err != nil) {
+            log.Fatal(err)
+        }
+        defer file.Close()
+	err = tpl.Execute(gohtml.NewWriter(file), data)
+
+	if err != nil {
+	    panic(err)
+	}
+        http.ServeFile(rw, req, "form.html")
     case "POST":
         body, err := ioutil.ReadAll(req.Body)
         if err != nil {
