@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grpcserver
+  labels:
+    app: grpcserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: grpcserver
+  template:
+    metadata:
+      labels:
+        app: grpcserver
+    spec:
+      containers:
+      - name: grpc-server
+        image: momomengyu/kubernetes-grpctracingserver:part0
+        ports:
+        - containerPort: 8080

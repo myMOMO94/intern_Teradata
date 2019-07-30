@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package bytearray;
+
+service ByteArray {
+  rpc SendRequest (byteRequest) returns (byteReply) {}
+}
+
+message byteRequest {
+  bytes request = 1;
+}
+
+message byteReply {
+  bytes reply = 1;
+}
