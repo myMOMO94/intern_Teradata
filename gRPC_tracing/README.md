@@ -32,6 +32,8 @@
 **(You will see messages on your screen)**
 
 *Now, you can browse http://localhost:16686 to view all your traces.*
+![jaegerui](https://github.com/myMOMO94/intern_Teradata/blob/master/gRPC_tracing/jaegerUI.png)
+
 *Now, you can clean up everything:*
 ```
 > kubectl delete -f server/ (inside gRPC_tracing directory)
