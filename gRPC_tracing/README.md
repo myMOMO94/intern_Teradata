@@ -32,9 +32,6 @@
 **(You will see messages on your screen)**
 
 *Now, you can browse http://localhost:16686 to view all your traces.*
-```
-
-```
 *Now, you can clean up everything:*
 ```
 > kubectl delete -f server/ (inside gRPC_tracing directory)
