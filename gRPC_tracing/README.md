@@ -38,3 +38,49 @@
 ```
 > kubectl delete -f server/ (inside gRPC_tracing directory)
 ```
+
+## Part 2 Deploy grpc-server to kubernetes
+
+*You can pull the images here:*
+```
+> momomengyu/kubernetes-grpctracingserver:part1
+> momomengyu/kubernetes-grpctracingclient:part1
+```
+
+*At first, use Jaeger Operator to depoly Jaeger to Kubernetes Cluster as a DaemonSet:*
+```
+> kubectl apply -f daemonset.yaml
+```
+
+*Find the Jaeger UI ip address:*
+```
+>minikube ip
+```
+**(If you are using minikube, otherwise, this will not work. Also, if you want your local client or client on other machine connect to Jaeger, please change the jaeger agent host address inside client program with this address.)**
+
+*Make sure the ingress ip is show up here before you go next:*
+```
+> kubectl get ing
+```
+
+*Deploy grpc-server to a Kubernetes Pod:*
+```
+> kubectl apply -f server/server.yaml
+```
+*Create a grpc-server services:*
+```
+> kubectl apply -f server/server-svc.yaml
+```
+
+*Run client locally:*
+```
+> go build gRPC_client.go
+> ./gRPC_client -verbose=false 512 2
+```
+*Or, you can run the client on Kubernetes as well:*
+```
+> kubectl apply -f client/client.yaml
+> kubectl apply -f client/client-svc.yaml
+```
+
+*To access the Jaeger UI to find all your traces: browse the minikube ip address on your browser.*

@@ -5,6 +5,7 @@ import (
     "fmt"
     "log"
     "net"
+    "os"
     "google.golang.org/grpc"
     "intern_Teradata/gRPC_tracing/bytearray"
 
@@ -28,9 +29,11 @@ func (s *byteArrayServer) SendRequest(ctx context.Context, req *bytearray.ByteRe
 
 func main() {
     fmt.Println("Launching server...")
-
+    fmt.Println("Jaeger agent host address: ", os.Getenv("JAEGER_AGENT_HOST"))
     var servOpts []grpc.ServerOption
-    tracer, closer := gwrapper.InitTracer("server", "127.0.0.1:6831")//"153.64.12.154:6831")
+    jaeger_agent := string(os.Getenv("JAEGER_AGENT_HOST") + ":6831")
+    fmt.Println(jaeger_agent)
+    tracer, closer := gwrapper.InitTracer("server", jaeger_agent)//os.Getenv("JAEGER_AGENT_HOST"))//"127.0.0.1:6831")//"153.64.12.154:6831")
     defer closer.Close()
 
     if tracer != nil {

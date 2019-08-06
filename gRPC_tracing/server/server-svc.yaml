@@ -5,7 +5,7 @@ metadata:
   labels:
     app: grpcserver
 spec:
-  type: LoadBalancer
+#  type: LoadBalancer
   ports:
   - port: 8080
     protocol: TCP

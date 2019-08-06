@@ -9,8 +9,8 @@ set -m
 #sleep 1
 
 # Start the helper process
-./gRPC_client $1 $NUMBYTES $NUMRUNS
-
+#./gRPC_client $1 $NUMBYTES $NUMRUNS
+./gRPC_client -verbose=false 512 1
 
 # the my_helper_process might need to know how to wait on the
 # primary process to start before it does its work and returns

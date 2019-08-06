@@ -5,13 +5,13 @@ import (
     "log"
     "fmt"
     "google.golang.org/grpc"
-    "intern_Teradata/docker_gRPC/bytearray"
     "time"
     "os"
     "flag"
     "strconv"
 
     //gwrapper "intern_Teradata/jaeger_gRPC_wrapper"
+    "intern_Teradata/gRPC_tracing/bytearray"
     gwrapper "intern_Teradata/gRPC_tracing/jaeger_gRPC_wrapper"
 )
 
@@ -46,7 +46,9 @@ func main() {
     }
 
     dialOpts := []grpc.DialOption{grpc.WithInsecure()}
-    tracer, closer := gwrapper.InitTracer("client", "127.0.0.1:6831")
+    jaeger_agent := string(os.Getenv("JAEGER_AGENT_HOST") + ":6831")
+    fmt.Println(jaeger_agent)
+    tracer, closer := gwrapper.InitTracer("client", "192.168.99.104:6831")//jaeger_agent)/*os.Getenv("JAEGER_AGENT_HOST"))*/"127.0.0.1:6831")
     defer closer.Close()
 
     if tracer != nil {
@@ -58,7 +60,7 @@ func main() {
     var conn *grpc.ClientConn
 
     //conn, err := grpc.Dial("gRPC-server:8080", dialOpts...)
-    conn, err := grpc.Dial("127.0.0.1:8080", dialOpts...)
+    conn, err := grpc.Dial("127.0.0.1:8080"/*"grpcserver:8080"*/, dialOpts...)
     if err != nil {
         log.Fatalf("fail to dial: %v", err)
     }
